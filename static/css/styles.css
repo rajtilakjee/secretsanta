@@ -1,0 +1,118 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: #006400; /* Dark green for Christmas */
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 80%;
+    color: #FFFFFF; /* White text */
+}
+
+.smaller-heading {
+    font-size: 1.5rem; /* Adjust the font size as needed */
+}
+
+.logo-container {
+    margin-bottom: 1rem;
+}
+
+.logo {
+    width: 60px;
+    height: auto;
+}
+
+.card-container {
+    background-color: #FFFFFF; /* White background */
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 20rem;
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #D6001C; /* Red border for Christmas accent */
+}
+
+.gradient-text {
+    color: #D6001C; /* Red text */
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.1rem;
+    margin-top: 0.1rem;
+}
+
+.subtitle {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #006400; /* Dark green for subtitle */
+    margin-bottom: 0.1rem;
+}
+
+.authorize-button,
+.authorized-button,
+button[type="submit"],
+button[disabled] {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #D6001C; /* Bright red for buttons */
+    color: #FFFFFF; /* White text */
+}
+
+.authorized-button,
+button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    font-size: 18px;
+    color: #FFFFFF; /* White text */
+    margin-top: 10px;
+    text-align: left; /* Align labels to the left */
+    display: block;
+}
+
+input[type="text"],
+textarea {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #404040;
+    border-radius: 5px;
+    margin-top: 10px;
+    width: 300px;
+    box-sizing: border-box; /* Include padding and border in width */
+}
+
+textarea {
+    resize: vertical;
+}
+
+.footer {
+    margin-top: 0.5rem;
+    font-size: 14px;
+    color: #FFFFFF; /* White text */
+}
+
+/* New text style with black font color */
+.black-text {
+    color: #000000; /* Black font color */
+    font-family: 'Roboto', sans-serif; /* Font family */
+    font-size: 14px; /* Default font size */
+    font-weight: normal; /* Regular font weight */
+}

@@ -4,14 +4,23 @@ from uuid import uuid4
 import requests
 import requests.auth
 import urllib
+import re
+from urllib.parse import urlparse
 from dotenv import load_dotenv
 import os
+from supabase import create_client, Client
+import random
+import string
+
 
 load_dotenv()
 
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
+url = os.getenv("SUPABASE_URL")
+key = os.getenv("SUPABASE_KEY")
+supabase: Client = create_client(url, key)
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
@@ -36,17 +45,52 @@ def reddit_callback():
     access_token = get_token(code)
     username = get_username(access_token)
     session["username"] = username
-    # Note: In most cases, you'll want to store the access token, in, say,
-    # a session for use in other parts of your web app.
-    return render_template("index.html", username=username)
-
-
-@app.route("/register")
-def register():
-    if "username" in session:
-        return render_template("register.html", username=session["username"])
+    response = supabase.table("gifts").select("*").eq("username", username).execute()
+    if response.data:
+        gift_sent = 1
     else:
-        return redirect(url_for("homepage"))  # Redirect to home if not authenticated
+        gift_sent = 0
+    return render_template("index.html", username=username, gift_sent=gift_sent)
+
+
+@app.route("/send_gift", methods=["GET", "POST"])
+def send_gift():
+    if "username" not in session:
+        return redirect(url_for("homepage"))
+
+    confirmation_message = None  # Initialize a variable to hold the message
+
+    if request.method == "POST":
+        ecard_url = request.form.get("ecard_url")
+        username = session["username"]
+
+        if not ecard_url:
+            confirmation_message = "Please provide a valid eCard URL!"
+            return render_template(
+                "send_gift.html", username=username, message=confirmation_message
+            )
+        
+        # Validate URL
+        if not is_valid_url(ecard_url):
+            confirmation_message = "Invalid URL! Please provide a valid eCard URL starting with http:// or https://. Click on the back button to resend your gift with the correct URL."
+            return render_template(
+                "send_gift.html", username=username, message=confirmation_message
+            )
+
+        # Save gift to Supabase
+        try:
+            response = (
+                supabase.table("gifts")
+                .upsert({"username": username, "ecard_url": ecard_url})
+                .execute()
+            )
+            confirmation_message = "Your gift has been sent successfully!"
+        except Exception as e:
+            confirmation_message = "Failed to send gift. Please try again later."
+
+    return render_template(
+        "send_gift.html", username=session["username"], message=confirmation_message
+    )
 
 
 def make_authorization_url():
@@ -111,6 +155,12 @@ def user_agent():
 def base_headers():
     return {"User-Agent": user_agent()}
 
+def is_valid_url(url):
+    """
+    Validate if the URL starts with http:// or https://.
+    """
+    parsed_url = urlparse(url)
+    return bool(parsed_url.scheme) and parsed_url.scheme in ["http", "https"] and bool(parsed_url.netloc)
 
 if __name__ == "__main__":
     app.run(debug=True, port=65010)
