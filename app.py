@@ -12,6 +12,7 @@ from supabase import create_client, Client
 import random
 import string
 
+# https://indiasocial.pythonanywhere.com/reddit_callback
 
 load_dotenv()
 
@@ -61,18 +62,11 @@ def send_gift():
     confirmation_message = None  # Initialize a variable to hold the message
 
     if request.method == "POST":
-        ecard_url = request.form.get("ecard_url")
+        secret_gift = request.form.get("secret_gift")
         username = session["username"]
 
-        if not ecard_url:
-            confirmation_message = "Please provide a valid eCard URL!"
-            return render_template(
-                "send_gift.html", username=username, message=confirmation_message
-            )
-        
-        # Validate URL
-        if not is_valid_url(ecard_url):
-            confirmation_message = "Invalid URL! Please provide a valid eCard URL starting with http:// or https://. Click on the back button to resend your gift with the correct URL."
+        if not secret_gift:
+            confirmation_message = "Please provide a valid gift for your Secret Santa!"
             return render_template(
                 "send_gift.html", username=username, message=confirmation_message
             )
@@ -81,7 +75,7 @@ def send_gift():
         try:
             response = (
                 supabase.table("gifts")
-                .upsert({"username": username, "ecard_url": ecard_url})
+                .upsert({"username": username, "secret_gift": secret_gift})
                 .execute()
             )
             confirmation_message = "Your gift has been sent successfully!"
@@ -154,13 +148,6 @@ def user_agent():
 
 def base_headers():
     return {"User-Agent": user_agent()}
-
-def is_valid_url(url):
-    """
-    Validate if the URL starts with http:// or https://.
-    """
-    parsed_url = urlparse(url)
-    return bool(parsed_url.scheme) and parsed_url.scheme in ["http", "https"] and bool(parsed_url.netloc)
 
 if __name__ == "__main__":
     app.run(debug=True, port=65010)

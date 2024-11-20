@@ -36,9 +36,8 @@
             </div>
             {% else %}
             <form method="POST">
-                <label for="ecard_url" class="black-text">eCard URL:</label><br>
-                <input type="text" name="ecard_url" id="ecard_url"
-                    required><br><br>
+                <label for="secret_gift" class="black-text">Please type your secret gift for your Secret Santa in the box given below:</label><br>
+                <textarea name="secret_gift" id="secret-gift" rows="10" cols="50" style="border: 1px solid #a6a6a6;" required></textarea><br><br>
                 <button type="submit" class="authorize-button">Send Gift</button>
             </form>
             {% endif %}
