@@ -9,6 +9,12 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 80%;
     color: #FFFFFF; /* White text */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('/static/christmas.png');
+    background-size: contain;
+    background-repeat: repeat;
 }
 
 .smaller-heading {
