@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Rajtilak Bhattacharjee">
+        <link rel="icon" type="image/x-icon"
+            href="{{ url_for('static', filename='santa.png') }}">
+        <script type="module" src="https://md-block.verou.me/md-block.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap"
+            rel="stylesheet">
+
+        <title>Secret Santa - r/IndiaSocial</title>
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='css/styles.css') }}">
+    </head>
+    <body>
+        <div class="card-container">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='santa.png') }}"
+                    alt="Logo" class="logo">
+            </div>
+
+            <h1 class="smaller-heading gradient-text">Secret Santa</h1>
+            <h2 class="subtitle">r/IndiaSocial</h2>
+
+            {% if secret_gift %}
+            <div class="black-text">
+                <p>Your Secret Santa gift is:</p>
+                <div style="border:green; border-width:3px; border-style:dashed; text-align:left; padding: 5px 5px 5px 5px">
+                    <pre id="gfg"><md-block>{{ secret_gift }}</md-block></pre>
+                </div>
+            </div>
+            {% elif error_message %}
+            <div class="black-text error">
+                <p>{{ error_message }}</p>
+            </div>
+            {% else %}
+            <div class="black-text error">
+                <p>Something went wrong. Please try again later.</p>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <div class="footer">
+            Made with <span style="color: red;">❤️</span> by Rajtilak Bhattacharjee
+        </div>
+    </body>
+</html>
